@@ -1,0 +1,19 @@
+{
+  "name": "taskery-server",
+  "version": "0.0.1",
+  "description": "Restful API for Taskery",
+  "license": "MIT",
+  "author": "Remy Gratwohl",
+  "main": "server.js",
+  "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.2.0",
+    "jwt-simple": "^0.5.1",
+    "mongoose": "^4.7.1",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1"
+  }
+}
