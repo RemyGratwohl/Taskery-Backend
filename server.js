@@ -26,6 +26,8 @@ require('./app/config/authentication')(passport);
 
 app.use('/user', users);
 
-app.listen( process.env.PORT || 3000, function () {
+var port = process.env.PORT || 3000;
+
+app.listen( port, function () {
     console.log('App listening on port 3000!')
 })
