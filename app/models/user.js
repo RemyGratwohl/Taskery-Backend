@@ -12,7 +12,8 @@ var schema = new mongoose.Schema({
     },
     password: String,
     character: {type: mongoose.Schema.Types.ObjectId, ref: 'Character'},
-    todos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ToDo'}]
+    todos: [{type: mongoose.Schema.Types.ObjectId, ref: 'ToDo'}]
+    },{ timestamps: true
 });
 
 schema.pre('save', function (next) {

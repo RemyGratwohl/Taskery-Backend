@@ -10,13 +10,14 @@ var User = require('../models/user');
 var config = require('../config/config');
 var characterRouter = require('./characters');
 
-router.post('/signup', function(req,res){
+router.post('/register', function(req,res){
     if(!req.body.email || !req.body.password){
         // Send
-        res.json({
-            success: 'false',
-            message: 'Missing Email or Password'
-        });
+        res.status(422)
+            .json({
+                name: 'MissingData',
+                description: 'Missing Email or Password'
+            });
     }else{
         var user = new User({
             email: req.body.email,
@@ -25,20 +26,22 @@ router.post('/signup', function(req,res){
 
         user.save(function(err){
             if(err){
-                return res.json({
-                    success: 'false',
-                    message: 'Email address already exists'
-                });
+                return res.status(422)
+                    .json({
+                        name: 'EmailExists',
+                        description: 'An Account With That Email Already Exists'
+                    });
             }
 
+            console.log('User ' + user.email + ' successfully created');
             res.json({
-                success: true,
                 message: 'User created successfully'
             });
         });
     }
 });
 
+// user/login
 router.post('/login', function(req,res){
     User.findOne({
         email: req.body.email
@@ -46,10 +49,10 @@ router.post('/login', function(req,res){
         if (err) throw err;
 
         if (!user){
-            res.status(400)
+            res.status(422)
                 .json({
-                    success: false,
-                    message: 'User not found'
+                    name: 'MissingUser',
+                    description: 'The user was not found'
                 });
         } else {
             // Check password
@@ -57,17 +60,16 @@ router.post('/login', function(req,res){
                 if (!err && isTheSame){
                     var jwtToken = jwt.encode(user,config.secret);
                     res.json({
-                        success: true,
                         email: user.email,
-                        message: 'Authentication successful',
                         jwtToken: jwtToken,
-                        character: user.character
+                        createdAt: user.createdAt,
+                        updatedAt: user.updatedAt
                     });
                 } else {
-                    res.status(400)
+                    res.status(422)
                         .json({
-                            success: false,
-                            message: 'Incorrect Password'
+                            name: 'WrongPassword',
+                            description: 'The Password was Incorrect'
                         });
                 }
             });
