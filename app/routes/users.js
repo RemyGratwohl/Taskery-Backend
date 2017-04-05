@@ -43,37 +43,39 @@ router.post('/register', function(req,res){
 
 // user/login
 router.post('/login', function(req,res){
-    User.findOne({
-        email: req.body.email
-    }, function(err, user){
-        if (err) throw err;
+    User
+        .findOne({email: req.body.email})
+        .populate('character')
+        .exec(function(err, user){
+            if (err) throw err;
 
-        if (!user){
-            res.status(422)
-                .json({
-                    name: 'MissingUser',
-                    description: 'The user was not found'
-                });
-        } else {
-            // Check password
-            user.comparePassword(req.body.password, function(err,isTheSame) {
-                if (!err && isTheSame){
-                    var jwtToken = jwt.encode(user,config.secret);
-                    res.json({
-                        email: user.email,
-                        jwtToken: jwtToken,
-                        createdAt: user.createdAt,
-                        updatedAt: user.updatedAt
+            if (!user){
+                res.status(422)
+                    .json({
+                        name: 'MissingUser',
+                        description: 'The user was not found'
                     });
-                } else {
-                    res.status(422)
-                        .json({
-                            name: 'WrongPassword',
-                            description: 'The Password was Incorrect'
+            } else {
+                // Check password
+                user.comparePassword(req.body.password, function(err,isTheSame) {
+                    if (!err && isTheSame){
+                        var jwtToken = jwt.encode(user,config.secret);
+                        res.json({
+                            email: user.email,
+                            jwtToken: jwtToken,
+                            character: user.character,
+                            createdAt: user.createdAt,
+                            updatedAt: user.updatedAt
                         });
-                }
-            });
-        }
+                    } else {
+                        res.status(422)
+                            .json({
+                                name: 'WrongPassword',
+                                description: 'The Password was Incorrect'
+                            });
+                    }
+                });
+            }
     });
 });
 

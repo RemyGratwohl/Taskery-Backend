@@ -3,7 +3,6 @@
  */
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
-var ToDo = require('./todo');
 
 var schema = new mongoose.Schema({
     email: {
@@ -11,8 +10,7 @@ var schema = new mongoose.Schema({
         unique: true
     },
     password: String,
-    character: {type: mongoose.Schema.Types.ObjectId, ref: 'Character'},
-    todos: [{type: mongoose.Schema.Types.ObjectId, ref: 'ToDo'}]
+    character: {type: mongoose.Schema.Types.ObjectId, ref: 'Character'}
     },{ timestamps: true
 });
 

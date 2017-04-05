@@ -4,6 +4,6 @@
 
 module.exports = {
     secret: 'cinnamonwaffles',
-    database: 'mongodb://remy:waffles@olympia.modulusmongo.net:27017/meqy3Zoq',
+    database: 'mongodb://remy:waffles@ds151820.mlab.com:51820/taskery',
     jwtSession: {session: false}
 };
