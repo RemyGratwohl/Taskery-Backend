@@ -8,6 +8,7 @@ var passport = require('passport');
 var jwt = require('jwt-simple');
 var Character = require('../models/character');
 var User = require('../models/user');
+var questRouter = require('./quests');
 
 router.get('/', passport.authenticate('jwt', {
     session: false
@@ -20,11 +21,14 @@ router.post('/create', passport.authenticate('jwt', {
     session: false
 }), function(req, res) {
 
-    console.log(req.user.email)
     console.log(req.body);
 
     if(!req.body){
-        // EMPTY REQUEST
+        res.status(422)
+            .json({
+                name: 'MissingData',
+                description: 'Request has no data'
+            });
     }else{
         var char = new Character({
             _user: req.user._id,
@@ -33,7 +37,10 @@ router.post('/create', passport.authenticate('jwt', {
             maxHP: req.body.maxHP,
             class_id: req.body.char_class_id,
             xp: req.body.xp,
-            numGold: req.body.numGold
+            numGold: req.body.numGold,
+            updatedAt: req.body.updatedAt,
+            createdAt: req.body.createdAt
+
         });
 
         char.save(function(err) {
@@ -42,7 +49,7 @@ router.post('/create', passport.authenticate('jwt', {
                 return res.status(422)
                     .json({
                         name: 'CharacterExists',
-                        description: 'An Character already exists on this account'
+                        description: 'This account already has a character made'
                     });
             }
 
@@ -58,5 +65,38 @@ router.post('/create', passport.authenticate('jwt', {
         });
     }
  });
+
+router.post('/update', passport.authenticate('jwt', {session: false}), function(req,res){
+
+    if(!req.body){
+        res.status(422)
+            .json({
+                name: 'MissingData',
+                description: 'Request has no data'
+            });
+    }else{
+        Character.findOneAndUpate({_user: req.user._id},
+            {$set:
+                {
+                    // update quests
+                    // update questsCompleted
+                    // update numGold
+                    // update currentHP
+                    // update maxHp
+                    // update xp
+                    // update lastLogin
+                }
+            }).exec(function (err, user) {
+                if(err){
+                    console.log(err);
+                    // respond with error
+                }else{
+                    // respond with sucess
+                }
+        });
+    }
+});
+
+router.use('/quests',questRouter);
 
 module.exports = router;

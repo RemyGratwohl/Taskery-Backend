@@ -14,7 +14,9 @@ var schema = new mongoose.Schema({
    currentHP: Number,
    maxHP: Number,
    xp: Number,
-   lastLogin: Date
+   lastLogin: Date,
+   updatedAt: Date,
+   createdAt: Date
 });
 
-module.exports = mongoose.model('Character', schema)
+module.exports = mongoose.model('Character', schema);

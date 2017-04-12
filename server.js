@@ -15,7 +15,12 @@ var users = require('./app/routes/users');
 var app =  express();
 
 // Connect to the database
-mongoose.connect(config.database);
+mongoose.Promise = global.Promise;
+
+var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+    replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };
+
+mongoose.connect(config.database,options);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
