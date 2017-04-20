@@ -9,6 +9,9 @@ var jwt = require('jwt-simple');
 var User = require('../models/user');
 var config = require('../config/config');
 var characterRouter = require('./characters');
+var Quest = require('../models/quest');
+var deepPopulate = require('mongoose-deep-populate');
+var Character = require('../models/character');
 
 router.post('/register', function(req,res){
     if(!req.body.email || !req.body.password){
@@ -45,9 +48,11 @@ router.post('/register', function(req,res){
 router.post('/login', function(req,res){
     User
         .findOne({email: req.body.email})
-        .populate('character')
+        .deepPopulate('character character.quests character.questsCompleted')
         .exec(function(err, user){
             if (err) throw err;
+
+            console.log('User object to send ' + JSON.stringify(user, null, 4));
 
             if (!user){
                 res.status(422)

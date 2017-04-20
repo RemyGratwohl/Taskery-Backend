@@ -3,6 +3,7 @@
  */
 
 var mongoose = require('mongoose');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var schema = new mongoose.Schema({
    _user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true},
@@ -18,5 +19,8 @@ var schema = new mongoose.Schema({
    updatedAt: Date,
    createdAt: Date
 });
+
+schema.plugin(deepPopulate);
+
 
 module.exports = mongoose.model('Character', schema);

@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var schema = new mongoose.Schema({
     email: {
@@ -43,6 +44,8 @@ schema.methods.comparePassword = function(password, cb) {
         cb(null, isMatch);
     });
 };
+
+schema.plugin(deepPopulate);
 
 module.exports = mongoose.model('User', schema);
 

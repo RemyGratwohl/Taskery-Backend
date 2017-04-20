@@ -10,7 +10,10 @@ var options = {
 
 module.exports = function(passport) {
     passport.use(new JWTStrategy(options,function(jwt_payload, done) {
-        User.findOne({id: jwt_payload.sub}, function(err, user) {
+        User
+            .findOne({id: jwt_payload.sub})
+            .populate('character')
+            .exec(function(err, user){
             if (err) {
                 return done(err, false);
             }
