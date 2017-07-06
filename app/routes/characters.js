@@ -78,20 +78,18 @@ router.post('/update', passport.authenticate('jwt', {session: false}), function(
         Character.findOneAndUpate({_user: req.user._id},
             {$set:
                 {
-                    // update quests
-                    // update questsCompleted
-                    // update numGold
-                    // update currentHP
-                    // update maxHp
-                    // update xp
-                    // update lastLogin
+                    numGold: req.body.numGold,
+                    xp: req.body.xp,
+                    maxHp: req.body.maxHP,
+                    currentHP: req.body.currentHP
                 }
             }).exec(function (err, user) {
                 if(err){
                     console.log(err);
                     // respond with error
+                    res.response{message: err}
                 }else{
-                    // respond with sucess
+                    res.json({message: 'Success!'});
                 }
         });
     }
